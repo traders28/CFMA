@@ -1,0 +1,76 @@
+<!-- invoice.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Issue Invoice</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf-autotable.min.js"></script>
+</head>
+<body>
+  <div class="container form-container">
+    <h2 class="mb-4">Issue Invoice</h2>
+    <form id="invoiceForm">
+      <div class="mb-3">
+        <label for="invoiceType" class="form-label">Invoice Type</label>
+        <select class="form-select" id="invoiceType">
+          <option>Simplified</option>
+          <option>Ordinary</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="invoiceFor" class="form-label">For What</label>
+        <select class="form-select" id="invoiceFor">
+          <option>Inventory Cars</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="mb-3" id="carSelectGroup" style="display:none;">
+        <label for="invoiceCar" class="form-label">Select Car</label>
+        <select class="form-select" id="invoiceCar"></select>
+      </div>
+      <div class="mb-3">
+        <label for="buyer" class="form-label">Buyer</label>
+        <input type="text" class="form-control" id="buyer">
+        <select class="form-select mt-2" id="savedBuyers">
+          <option value="">New Buyer</option>
+          <!-- Populate dynamically -->
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="vinInvoice" class="form-label">VIN</label>
+        <input type="text" class="form-control" id="vinInvoice">
+      </div>
+      <div class="mb-3">
+        <label for="regInvoice" class="form-label">Reg Number</label>
+        <input type="text" class="form-control" id="regInvoice">
+      </div>
+      <div class="mb-3">
+        <label for="priceInvoice" class="form-label">Price</label>
+        <input type="number" class="form-control" id="priceInvoice">
+      </div>
+      <!-- For Bulgaria only -->
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="genAppendix">
+        <label class="form-check-label" for="genAppendix">Generate Appendix 12</label>
+      </div>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="genContract">
+        <label class="form-check-label" for="genContract">Generate Contract</label>
+      </div>
+      <button type="button" class="btn btn-primary" id="generateInvoice">Generate PDF</button>
+      <a href="dashboard.html" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/invoice.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!-- add_vehicle.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Vehicle</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+  <div class="container form-container">
+    <h2 class="mb-4">Add New Vehicle</h2>
+    <form id="addForm">
+      <div class="mb-3">
+        <label for="type" class="form-label">Type*</label>
+        <select class="form-select" id="type" required>
+          <option>Car</option>
+          <option>Motorcycle</option>
+          <option>Bus</option>
+          <option>Truck</option>
+          <option>Trailer</option>
+          <option>Platform</option>
+          <option>Caravan</option>
+          <option>Camper</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="brand" class="form-label">Brand*</label>
+        <select class="form-select" id="brand" required>
+          <option>Toyota</option>
+          <option>Ford</option>
+          <option>Chevrolet</option>
+          <option>Honda</option>
+          <option>Hyundai</option>
+          <option>Nissan</option>
+          <option>Volkswagen</option>
+          <option>BMW</option>
+          <option>Mercedes-Benz</option>
+          <option>Audi</option>
+          <option>Kia</option>
+          <option>Subaru</option>
+          <option>Jeep</option>
+          <option>Porsche</option>
+          <option>Ferrari</option>
+          <option>Tesla</option>
+          <option>BYD</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="model" class="form-label">Model*</label>
+        <input type="text" class="form-control" id="model" required>
+      </div>
+      <div class="mb-3">
+        <label for="regPlate" class="form-label">Reg Plate</label>
+        <input type="text" class="form-control" id="regPlate">
+      </div>
+      <div class="mb-3">
+        <label for="mileage" class="form-label">Mileage* (km)</label>
+        <input type="number" class="form-control" id="mileage" required>
+      </div>
+      <div class="mb-3">
+        <label for="fuel" class="form-label">Fuel*</label>
+        <select class="form-select" id="fuel" required>
+          <option>Gasoline</option>
+          <option>Diesel</option>
+          <option>Electric</option>
+          <option>Hybrid</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="color" class="form-label">Color</label>
+        <input type="text" class="form-control" id="color">
+      </div>
+      <div class="mb-3">
+        <label for="moreInfo" class="form-label">More Information</label>
+        <textarea class="form-control" id="moreInfo"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="variant" class="form-label">Variant</label>
+        <input type="text" class="form-control" id="variant">
+      </div>
+      <div class="mb-3">
+        <label for="engine" class="form-label">Engine</label>
+        <input type="text" class="form-control" id="engine">
+      </div>
+      <div class="mb-3">
+        <label for="vin" class="form-label">VIN</label>
+        <input type="text" class="form-control" id="vin">
+      </div>
+      <div class="mb-3">
+        <label for="firstRegistration" class="form-label">First Registration</label>
+        <input type="date" class="form-control" id="firstRegistration">
+      </div>
+      <div class="mb-3">
+        <label for="purchaseDate" class="form-label">Purchase Date</label>
+        <input type="date" class="form-control" id="purchaseDate">
+      </div>
+      <div class="mb-3">
+        <label for="purchasedPrice" class="form-label">Purchased Price (USD)</label>
+        <input type="number" class="form-control" id="purchasedPrice">
+      </div>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="hasWarranty">
+        <label class="form-check-label" for="hasWarranty">Has Warranty</label>
+      </div>
+      <div class="mb-3">
+        <label for="notes" class="form-label">Notes</label>
+        <textarea class="form-control" id="notes"></textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Images</label>
+        <button type="button" class="btn btn-secondary" id="uploadImages">Upload Images</button>
+        <div id="preview-container" class="mt-2"></div>
+        <input type="file" id="imageInput" accept="image/*" multiple style="display:none;">
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple style="display:none;">
+      </div>
+      <div class="mb-3">
+        <label for="video" class="form-label">Video</label>
+        <input type="file" class="form-control" id="video" accept="video/*">
+        <video id="video-preview" controls style="display:none;"></video>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Vehicle</button>
+      <a href="index.html" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/add_vehicle.js"></script>
+</body>
+</html>
