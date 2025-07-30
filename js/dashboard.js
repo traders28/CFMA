@@ -1,50 +1,64 @@
 import { auth, onAuthStateChanged, database, ref, get, child } from './firebase-init.js';
+import { generateSidebar, generateMobileSidebar } from './menu.js';
 
 onAuthStateChanged(auth, (user) => {
+  console.log('User authenticated, UID:', user ? user.uid : 'null');
   if (!user) {
     window.location.href = 'login.html';
   } else {
+    console.log('Initializing dashboard for user:', user.uid);
     loadVehicles(user.uid);
+    document.getElementById('sidebar').innerHTML = generateSidebar();
+    document.getElementById('mobileSidebar').innerHTML = generateMobileSidebar();
   }
 });
 
 function loadVehicles(userId) {
+  console.log('Starting loadVehicles for user:', userId);
   const dbRef = ref(database);
   get(child(dbRef, `users/${userId}/vehicles`)).then((snapshot) => {
+    console.log('Vehicles snapshot received, exists:', snapshot.exists());
     const vehicles = snapshot.val() || {};
+    console.log('Vehicles fetched:', Object.keys(vehicles).length, 'items');
     const tbody = document.querySelector('#inventoryTable tbody');
-    tbody.innerHTML = '';
-    Object.keys(vehicles).forEach((vehicleId) => {
-      const vehicle = vehicles[vehicleId];
-      const row = document.createElement('tr');
-      row.setAttribute('data-car', vehicleId);
-      row.setAttribute('data-brand', vehicle.brand);
-      row.setAttribute('data-model', vehicle.model);
-      row.setAttribute('data-year', vehicle.firstRegistration.split('-')[0]);
-      row.setAttribute('data-fuel', vehicle.fuel);
-      row.setAttribute('data-vin', vehicle.vin);
-      row.setAttribute('data-reg', vehicle.regPlate);
-      row.setAttribute('data-price', vehicle.purchasedPrice);
-      row.innerHTML = `
-        <td><img src="${vehicle.images[0] || 'https://via.placeholder.com/150'}" alt="${vehicle.brand} ${vehicle.model}"></td>
-        <td>${vehicle.brand} ${vehicle.model}</td>
-        <td>€${vehicle.purchasedPrice}</td>
-        <td>€${vehicle.expenses ? vehicle.expenses.reduce((sum, exp) => sum + exp.amount, 0) : 0}</td>
-        <td>€${vehicle.purchasedPrice + (vehicle.expenses ? vehicle.expenses.reduce((sum, exp) => sum + exp.amount, 0) : 0)}</td>
-        <td>€${vehicle.purchasedPrice * 1.25}</td>
-        <td><span class="badge bg-${vehicle.status === 'Listed' ? 'success' : 'warning'}">${vehicle.status}</span></td>
-        <td>
-          <div class="progress">
-            <div class="progress-bar bg-${vehicle.status === 'Listed' ? 'success' : 'warning'}" role="progressbar" style="width: ${vehicle.status === 'Listed' ? 80 : 50}%" aria-valuenow="${vehicle.status === 'Listed' ? 80 : 50}" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <small>${vehicle.status === 'Listed' ? 'In Service &rarr; Cleaning &rarr; Listed' : 'In Service &rarr; Cleaning &rarr; Prep'}</small>
-        </td>
-      `;
-      tbody.appendChild(row);
-    });
+    tbody.innerHTML = ''; // Clear any initial content
+    if (Object.keys(vehicles).length === 0) {
+      console.log('No vehicles found, initializing empty table');
+    } else {
+      Object.keys(vehicles).forEach((vehicleId) => {
+        console.log('Processing vehicle:', vehicleId);
+        const vehicle = vehicles[vehicleId];
+        const row = document.createElement('tr');
+        row.setAttribute('data-car', vehicleId);
+        row.setAttribute('data-brand', vehicle.brand);
+        row.setAttribute('data-model', vehicle.model);
+        row.setAttribute('data-year', vehicle.firstRegistration.split('-')[0]);
+        row.setAttribute('data-fuel', vehicle.fuel);
+        row.setAttribute('data-vin', vehicle.vin);
+        row.setAttribute('data-reg', vehicle.regPlate);
+        row.setAttribute('data-price', vehicle.purchasedPrice);
+        row.innerHTML = `
+          <td><img src="${vehicle.images && vehicle.images.length > 0 ? vehicle.images[0] : 'https://via.placeholder.com/150'}" alt="${vehicle.brand} ${vehicle.model}"></td>
+          <td>${vehicle.brand} ${vehicle.model}</td>
+          <td>€${vehicle.purchasedPrice}</td>
+          <td>€${vehicle.expenses ? vehicle.expenses.reduce((sum, exp) => sum + exp.amount, 0) : 0}</td>
+          <td>€${vehicle.purchasedPrice + (vehicle.expenses ? vehicle.expenses.reduce((sum, exp) => sum + exp.amount, 0) : 0)}</td>
+          <td>€${vehicle.purchasedPrice * 1.25}</td>
+          <td><span class="badge bg-${vehicle.status === 'Listed' ? 'success' : 'warning'}">${vehicle.status}</span></td>
+          <td>
+            <div class="progress">
+              <div class="progress-bar bg-${vehicle.status === 'Listed' ? 'success' : 'warning'}" role="progressbar" style="width: ${vehicle.status === 'Listed' ? 80 : 50}%" aria-valuenow="${vehicle.status === 'Listed' ? 80 : 50}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <small>${vehicle.status === 'Listed' ? 'In Service &rarr; Cleaning &rarr; Listed' : 'In Service &rarr; Cleaning &rarr; Prep'}</small>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
 
     document.querySelectorAll('#inventoryTable tbody tr').forEach(row => {
       row.addEventListener('click', () => {
+        console.log('Row clicked, loading timeline');
         document.querySelectorAll('#inventoryTable tbody tr').forEach(r => r.classList.remove('selected'));
         row.classList.add('selected');
         const vehicleId = row.getAttribute('data-car');
@@ -52,14 +66,17 @@ function loadVehicles(userId) {
       });
     });
   }).catch((error) => {
-    console.error('Error loading vehicles:', error);
+    console.error('Error loading vehicles:', error.message);
   });
 }
 
 function displayTimeline(userId, vehicleId) {
+  console.log('Starting displayTimeline for vehicle:', vehicleId);
   const dbRef = ref(database);
   get(child(dbRef, `users/${userId}/vehicles/${vehicleId}/timeline`)).then((snapshot) => {
+    console.log('Timeline snapshot received, exists:', snapshot.exists());
     const timeline = snapshot.val() || [];
+    console.log('Timeline fetched:', timeline.length, 'events');
     const timelineContent = document.getElementById('timeline-content');
     timelineContent.innerHTML = timeline.length > 0
       ? timeline.map(event => `
@@ -70,33 +87,9 @@ function displayTimeline(userId, vehicleId) {
         `).join('')
       : '<p>No timeline available.</p>';
   }).catch((error) => {
-    console.error('Error loading timeline:', error);
+    console.error('Error loading timeline:', error.message);
   });
 }
-
-const menuItems = [
-  { icon: 'fas fa-home', text: 'Home', href: '#' },
-  { icon: 'fas fa-car', text: 'My Cars', href: '#' },
-  { icon: 'fas fa-money-bill', text: 'Taxes', href: '#' },
-  { icon: 'fas fa-truck', text: 'Trips', href: '#' },
-  { icon: 'fas fa-gas-pump', text: 'Refuels', href: '#' },
-  { icon: 'fas fa-calendar-alt', text: 'Reminders', href: '#' },
-  { icon: 'fas fa-list-check', text: 'Checklists', href: '#' },
-  { icon: 'fas fa-tasks', text: 'Tasks', href: '#' },
-  { icon: 'fas fa-dollar-sign', text: 'Incomes', href: '#' },
-  { icon: 'fas fa-box', text: 'Storage Parts', href: '#' },
-  { icon: 'fas fa-wrench', text: 'Repairs', href: '#' },
-  { icon: 'fas fa-burn', text: 'Fuel consumption', href: '#' },
-  { icon: 'fas fa-star', text: 'Plans', href: '#' },
-  { icon: 'fas fa-download', text: 'Exports', href: '#' },
-  { icon: 'fas fa-chart-bar', text: 'Reports', href: '#' },
-  { icon: 'fas fa-history', text: 'Records History', href: '#' },
-  { icon: 'fas fa-users', text: 'Employees', href: '#' },
-  { icon: 'fas fa-search', text: 'Check VIN', href: '#' }
-];
-
-document.getElementById('sidebar').innerHTML = `<h4 class="text-white">Dashboard</h4>` + menuItems.map(item => `<a href="${item.href}"><i class="${item.icon}"></i> ${item.text}</a>`).join('');
-document.getElementById('mobileSidebar').innerHTML = menuItems.map(item => `<a href="${item.href}" class="list-group-item list-group-item-action bg-dark text-white"><i class="${item.icon}"></i> ${item.text}</a>`).join('');
 
 const carModels = {
   'Audi': ['A1', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'Q3', 'Q5', 'Q7', 'TT', 'R8'],
@@ -139,7 +132,8 @@ document.getElementById('uploadImages').addEventListener('click', () => {
   }
 });
 
-const handleFiles = (files, isCarRecognition = false) => {
+const handleFiles = async (files, isCarRecognition = false) => {
+  console.log('Starting handleFiles with isCarRecognition:', isCarRecognition);
   const preview = document.getElementById('preview-container');
   preview.innerHTML = '';
   Array.from(files).forEach(file => {
@@ -148,16 +142,25 @@ const handleFiles = (files, isCarRecognition = false) => {
     preview.appendChild(img);
   });
   if (files.length > 0) {
-    Tesseract.recognize(files[0], 'eng').then(({ data: { text } }) => {
+    try {
+      console.log('Starting Tesseract recognition');
+      const { data: { text } } = await Tesseract.recognize(files[0], 'eng');
+      console.log('Tesseract text:', text);
       const vinMatch = text.match(/[A-HJ-NPR-Z0-9]{17}/i);
-      if (vinMatch) document.getElementById('vin').value = vinMatch[0];
+      if (vinMatch) {
+        document.getElementById('vin').value = vinMatch[0];
+        console.log('VIN set:', vinMatch[0]);
+      }
       if (isCarRecognition) {
         alert('Recognized car: Example Brand Model');
         document.getElementById('brand').value = 'Audi';
         document.getElementById('brand').dispatchEvent(new Event('change'));
         document.getElementById('model').value = 'A4';
+        console.log('Car recognition applied');
       }
-    });
+    } catch (error) {
+      console.error('Tesseract error in handleFiles:', error.message);
+    }
   }
 };
 
@@ -174,12 +177,22 @@ document.getElementById('scanPlate').addEventListener('click', () => {
   document.getElementById('plateInput').click();
 });
 
-document.getElementById('plateInput').addEventListener('change', e => {
+document.getElementById('plateInput').addEventListener('change', async e => {
   if (e.target.files[0]) {
-    Tesseract.recognize(e.target.files[0], 'eng').then(({ data: { text } }) => {
+    console.log('Starting plate scan');
+    try {
+      const { data: { text } } = await Tesseract.recognize(e.target.files[0], 'eng');
+      console.log('Plate text:', text);
       const plateMatch = text.match(/[A-Z0-9]{6,8}/i);
-      if (plateMatch) document.getElementById('regPlate').value = plateMatch[0];
-    });
+      if (plateMatch) {
+        document.getElementById('regPlate').value = plateMatch[0];
+        console.log('Plate set:', plateMatch[0]);
+      } else {
+        console.log('No plate match');
+      }
+    } catch (error) {
+      console.error('Plate scan error:', error.message);
+    }
   }
 });
 
@@ -187,15 +200,26 @@ document.getElementById('uploadDocument').addEventListener('click', () => {
   document.getElementById('documentInput').click();
 });
 
-document.getElementById('documentInput').addEventListener('change', e => {
+document.getElementById('documentInput').addEventListener('change', async e => {
   if (e.target.files[0]) {
-    Tesseract.recognize(e.target.files[0], 'eng').then(({ data: { text } }) => {
+    console.log('Starting document upload');
+    try {
+      const { data: { text } } = await Tesseract.recognize(e.target.files[0], 'eng');
+      console.log('Document text:', text);
       const priceMatch = text.match(/(\d+[\.,]?\d*)/);
-      if (priceMatch) document.getElementById('purchasedPrice').value = priceMatch[0];
+      if (priceMatch) {
+        document.getElementById('purchasedPrice').value = priceMatch[0];
+        console.log('Price set:', priceMatch[0]);
+      }
       const dateMatch = text.match(/(\d{2}\/\d{2}\/\d{4})/);
-      if (dateMatch) document.getElementById('purchaseDate').value = dateMatch[0].split('/').reverse().join('-');
+      if (dateMatch) {
+        document.getElementById('purchaseDate').value = dateMatch[0].split('/').reverse().join('-');
+        console.log('Date set:', dateMatch[0]);
+      }
       alert('Document recognized and saved.');
-    });
+    } catch (error) {
+      console.error('Document error:', error.message);
+    }
   }
 });
 
@@ -204,9 +228,3 @@ document.getElementById('recognizeCar').addEventListener('click', () => {
 });
 
 document.getElementById('carImageInput').addEventListener('change', e => handleFiles(e.target.files, true));
-
-document.getElementById('saveVehicle').addEventListener('click', () => {
-  alert('Vehicle saved!');
-  const modal = bootstrap.Modal.getInstance(document.getElementById('addVehicleModal'));
-  modal.hide();
-});

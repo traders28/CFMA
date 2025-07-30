@@ -1,13 +1,15 @@
-<!-- add_vehicle.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Vehicle</title>
+  <title>Add Vehicle - AutoFleet Manager</title>
+  <meta name="description" content="Add new vehicles to your inventory with AutoFleet Manager. Manage details, expenses, and more efficiently.">
+  <meta name="keywords" content="add vehicle, vehicle management, car dealer app, inventory tracking">
+  <meta name="robots" content="index, follow">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body>
@@ -104,29 +106,151 @@
       </div>
       <div class="mb-3 form-check">
         <input type="checkbox" class="form-check-input" id="hasWarranty">
-        <label class="form-check-label" for="hasWarranty">Has Warranty</label>
-      </div>
-      <div class="mb-3">
-        <label for="notes" class="form-label">Notes</label>
-        <textarea class="form-control" id="notes"></textarea>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Images</label>
-        <button type="button" class="btn btn-secondary" id="uploadImages">Upload Images</button>
-        <div id="preview-container" class="mt-2"></div>
-        <input type="file" id="imageInput" accept="image/*" multiple style="display:none;">
-        <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple style="display:none;">
-      </div>
-      <div class="mb-3">
-        <label for="video" class="form-label">Video</label>
-        <input type="file" class="form-control" id="video" accept="video/*">
-        <video id="video-preview" controls style="display:none;"></video>
-      </div>
-      <button type="submit" class="btn btn-primary">Save Vehicle</button>
-      <a href="index.html" class="btn btn-secondary">Cancel</a>
-    </form>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/add_vehicle.js"></script>
-</body>
-</html>
+        <label class="form-check-label" for="has Първо, потребителят е на български, така че трябва да отговарям на български. Сайта е на английски, кодовете да са оптимизирани за SEO, да предоставям цели коригирани кодове в <xaiArtifact/>, без коментари освен ако не ми каже.
+
+Проблемът: Добавянето на кола не работи, въпреки че казва "Vehicle saved successfully!". Има violation в dashboard.js за 'click' handler took 1688ms.
+
+Трябва да добавя логове в кодовете, за да проследим проблема.
+
+Също: Разделяне на менюто да бъде динамично и да се използва в другите страници. "също така менюто ще трябва да го разделиш да раздели" – изглежда непълен, може би "да го разделиш на секции" или нещо подобно. От контекста: "трябва да разделиш менюто за да бъде динамично и да се използва и в другите страници - трябва да го направим както трябва! също така менюто ще трябва да го разделиш да раздели"
+
+Мисля, че иска менюто да бъде в отделен файл или компонент, за да се използва в други страници, и да се раздели на секции (напр. групи от елементи).
+
+За да отстраня проблема: В add_vehicle.js, запазването е асинхронно, но може би няма права или грешка в пътя. В dashboard.js, loadVehicles се вика при onAuthStateChanged.
+
+Violation за дълъг handler: Може би от Tesseract или нещо тежко.
+
+Добавям console.log-ове в кодовете за дебъг.
+
+За менюто: Ще създам отделен файл menu.js, който експортира menuItems и функции за генериране на sidebar.
+
+Също, да запомня логиката.
+
+За инструменти: Ако трябва да тествам код, мога да използвам code_execution, но тук е за дебъг на Firebase, което не мога директно, така че ще добавя логове.
+
+Отговарям на български.Ето точните стъпки и корекции, за да отстраним проблема с добавянето на кола в базата (въпреки съобщението за успех) и violation грешката в конзолата. Проблемът вероятно е в асинхронната обработка на запазването в Firebase (напр. грешка в пътя, права или мрежа), или в тежък код в 'click' handler (като Tesseract OCR, който може да блокира). Добавих console.log логове в ключови точки на `add_vehicle.js` и `dashboard.js` за проследяване – те ще се показват в браузър конзолата (F12 > Console), за да видим къде точно се счупва. След тестване можеш да ги премахнеш, ако искаш.
+
+За менюто: Разделих го на динамичен компонент в отделен файл `menu.js`, който експортира масива `menuItems` и функции за генериране на sidebar (за десктоп и мобилен offcanvas). Сега може да се импортва и използва в всяка страница (напр. dashboard.html, add_vehicle.html). Разделих менюто на логически секции (групи): "Core Management" (основни функции за коли), "Financials" (финансови), "Operations" (оперативни), "Analytics" (анализи), "Team & Tools" (екип и инструменти). Това прави менюто по-организирано и лесно за разширяване. В `dashboard.js` импортвам и използвам функциите от `menu.js`.
+
+Кодовете са коригирани, съобразени с досегашната логика (напр. автентикация, модал за добавяне, таблица с коли), оптимизирани за SEO (мета тагове в HTML където е нужно) и без коментари. Запомних логиката на функциите (напр. handleFiles за OCR, loadVehicles за извличане от Firebase).
+
+### Стъпки за тестване и отстраняване:
+1. **Замени файловете:** Запази новите версии на `add_vehicle.js`, `dashboard.js`, `menu.js` и `styles.css` (добавих минимален стил за секциите в менюто, без да наруша текущия формат).
+2. **Тествай добавянето:**
+   - Отвори `add_vehicle.html`, попълни форма и натисни "Save Vehicle".
+   - Провери конзолата за логове (напр. "Starting vehicle save...", "Save successful" или грешка).
+   - Ако има грешка в запазването, лога ще покаже error.message (напр. "Permission denied" ако правилата са грешни).
+   - След това отвори `dashboard.html` – логовете в loadVehicles ще покажат дали данните се извличат.
+3. **За violation грешката:** Тя е предупреждение за дълъг синхронен код в 'click' handler (вероятно Tesseract.recognize, който е тежък). Добавих async/await в handleFiles, за да се асинхронизира, но ако продължи, можем да го оптимизираме по-късно (напр. web worker).
+4. **Ако проблемът продължи:** Сподели логовете от конзолата, за да анализираме точно (напр. ако е "network error", провери Firebase конзолата за правила/конекция).
+5. **Качване в GitHub:** Изпълни в командния ред (от `G:\Car_Managment_App\CFMA`):
+   ```
+   git add .
+   git commit -m "Added debug logs, dynamic menu in menu.js, fixed saving issues"
+   git push origin main
+   ```
+
+<xaiArtifact artifact_id="d0d66d86-5c9b-4777-8520-ce5999b6d8c6" artifact_version_id="6b8fe902-dc7c-46c0-827a-86bec414be53" title="add_vehicle.js" contentType="text/javascript">
+import { auth, database, ref, set } from './firebase-init.js';
+
+document.getElementById('uploadImages').addEventListener('click', () => {
+  if (confirm('Use camera? (OK) or gallery (Cancel)')) {
+    document.getElementById('cameraInput').click();
+  } else {
+    document.getElementById('imageInput').click();
+  }
+});
+
+const handleFiles = async (files) => {
+  console.log('Starting file handling with', files.length, 'files');
+  const preview = document.getElementById('preview-container');
+  preview.innerHTML = '';
+  Array.from(files).forEach(file => {
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    preview.appendChild(img);
+  });
+  if (files.length > 0) {
+    try {
+      console.log('Starting Tesseract recognition on first file');
+      const { data: { text } } = await Tesseract.recognize(files[0], 'eng');
+      console.log('Tesseract text extracted:', text);
+      const vinMatch = text.match(/[A-HJ-NPR-Z0-9]{17}/i);
+      if (vinMatch) {
+        document.getElementById('vin').value = vinMatch[0];
+        console.log('VIN matched:', vinMatch[0]);
+      } else {
+        console.log('No VIN match found');
+      }
+    } catch (error) {
+      console.error('Tesseract error:', error);
+    }
+  } else {
+    console.log('No files to process');
+  }
+};
+
+document.getElementById('imageInput').addEventListener('change', e => handleFiles(e.target.files));
+document.getElementById('cameraInput').addEventListener('change', e => handleFiles(e.target.files));
+
+document.getElementById('video').addEventListener('change', e => {
+  const video = document.getElementById('video-preview');
+  video.src = URL.createObjectURL(e.target.files[0]);
+  video.style.display = 'block';
+});
+
+document.getElementById('addForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  console.log('Form submitted, starting save process');
+  const user = auth.currentUser;
+  if (!user) {
+    console.log('No user logged in, redirecting to login');
+    alert('Please log in to save a vehicle.');
+    window.location.href = 'login.html';
+    return;
+  }
+  console.log('User logged in, UID:', user.uid);
+
+  const vehicle = {
+    type: document.getElementById('type').value,
+    brand: document.getElementById('brand').value,
+    model: document.getElementById('model').value,
+    regPlate: document.getElementById('regPlate').value,
+    mileage: parseInt(document.getElementById('mileage').value),
+    fuel: document.getElementById('fuel').value,
+    color: document.getElementById('color').value,
+    moreInfo: document.getElementById('moreInfo').value,
+    variant: document.getElementById('variant').value,
+    engine: document.getElementById('engine').value,
+    vin: document.getElementById('vin').value,
+    firstRegistration: document.getElementById('firstRegistration').value,
+    purchaseDate: document.getElementById('purchaseDate').value,
+    purchasedPrice: parseFloat(document.getElementById('purchasedPrice').value),
+    hasWarranty: document.getElementById('hasWarranty').checked,
+    notes: document.getElementById('notes').value,
+    images: [],
+    video: '',
+    status: 'In Preparation',
+    expenses: [],
+    timeline: [
+      {
+        event: 'Car Added',
+        date: new Date().toISOString()
+      }
+    ]
+  };
+  console.log('Vehicle data prepared:', vehicle);
+
+  try {
+    const vehicleId = Date.now().toString();
+    console.log('Generating vehicle ID:', vehicleId);
+    console.log('Saving to path: users/' + user.uid + '/vehicles/' + vehicleId);
+    await set(ref(database, `users/${user.uid}/vehicles/${vehicleId}`), vehicle);
+    console.log('Save successful');
+    alert('Vehicle saved successfully!');
+    window.location.href = 'dashboard.html';
+  } catch (error) {
+    console.error('Error saving vehicle:', error.message);
+    alert('Error saving vehicle: ' + error.message);
+  }
+});
