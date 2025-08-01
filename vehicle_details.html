@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vehicle Details - AutoFleet Manager</title>
+  <meta name="description" content="View vehicle details in AutoFleet Manager.">
+  <meta name="keywords" content="vehicle details, car dealer app">
+  <meta name="robots" content="index, follow">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="dropdown ms-auto">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="fas fa-user"></i> Profile
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+          <li><a class="dropdown-item" href="login.html">Login</a></li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">Language</a></li>
+          <li><a class="dropdown-item" href="#" id="logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="offcanvas offcanvas-start text-bg-dark d-md-none" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">Dashboard</h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" id="mobileSidebar"></div>
+  </div>
+
+  <div class="container-fluid pt-5">
+    <div class="row">
+      <nav class="col-md-2 sidebar p-3 d-none d-md-block" id="sidebar"></nav>
+
+      <main class="col-md-10 content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>Vehicle Details</h2>
+          <a href="dashboard.html" class="btn btn-secondary">Back</a>
+        </div>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="mb-3 position-relative text-truncate" style="min-height: 400px">
+              <img id="mainImage" src="https://placehold.co/600x400" alt="Main Vehicle Image" class="img-fluid w-100 mb-2">
+              <div class="d-flex justify-content-center align-items-center gap-2">
+                <button id="prevImage" class="btn btn-secondary">Previous</button>
+                <div id="gallery-preview" class="d-flex flex-wrap justify-content-center" style="gap: 5px;"></div>
+                <button id="nextImage" class="btn btn-secondary">Next</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <h3>Quick Info</h3>
+            <table class="table table-sm">
+              <tbody>
+                <tr><td>VIN</td><td id="quickVin"></td></tr>
+                <tr><td>Energy</td><td id="quickEnergy"></td></tr>
+                <tr><td>First Produced</td><td id="quickFirstProduced"></td></tr>
+                <tr><td>Mileage</td><td id="quickMileage"></td></tr>
+                <tr><td>Recoverable VAT</td><td id="quickRecoverableVAT"></td></tr>
+                <tr><td>Type</td><td id="quickType"></td></tr>
+                <tr><td>Storage Location</td><td id="quickStorage"></td></tr>
+                <tr><td>Purchase Price</td><td id="quickPurchasePrice"></td></tr>
+                <tr><td>VAT</td><td id="quickVAT"></td></tr>
+                <tr><td>New Import</td><td id="quickNewImport"></td></tr>
+                <tr><td>Import Country</td><td id="quickImportCountry"></td></tr>
+                <tr><td>Registration Number</td><td id="quickRegistration"></td></tr>
+                <tr><td>Purchased Date</td><td id="quickPurchasedDate"></td></tr>
+              </tbody>
+            </table>
+            <button id="openSchema" class="btn btn-secondary mb-2">Open Schema</button>
+            <button id="openGallery" class="btn btn-secondary mb-2">Open Gallery</button>
+            <button id="openDocuments" class="btn btn-secondary mb-2">View Documents</button>
+            <select id="vehicleStatus" class="form-select mb-2">
+              <option>In Preparation</option>
+              <option>Ready for Sale</option>
+              <option>Sold</option>
+            </select>
+            <button id="updateVehicle" class="btn btn-primary">Update Status</button>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <h3>Vehicle Information</h3>
+            <table class="table table-bordered" id="characteristicsContent"></table>
+          </div>
+          <div class="col-md-6">
+            <h3>Damages</h3>
+            <div id="damagesSchema" class="border p-3 mb-3" style="min-height: 300px;">
+              <!-- SVG schema will be loaded here -->
+            </div>
+            <h4>Comments</h4>
+            <p id="commentsContent"></p>
+            <div id="noteSection" style="display:none;">
+              <textarea id="noteText" class="form-control mb-2"></textarea>
+              <input type="file" id="noteImage" accept="image/*" class="mb-2">
+              <button id="saveNote" class="btn btn-primary">Save Note</button>
+            </div>
+          </div>
+        </div>
+        <div id="gallerySection" style="display:none;">
+          <h3>Gallery</h3>
+          <div id="gallery-preview-container" class="d-flex flex-wrap justify-content-center" style="gap: 5px;"></div>
+          <button id="uploadGalleryImage" class="btn btn-secondary">Upload Gallery Image</button>
+        </div>
+        <div id="documentsSection" style="display:none;">
+          <h3>Documents</h3>
+          <div id="documents-preview-container" class="d-flex flex-wrap"></div>
+          <button id="uploadDocument" class="btn btn-secondary">Upload Document</button>
+        </div>
+
+        <!-- Damage Modal -->
+        <div class="modal fade" id="damageModal" tabindex="-1" aria-labelledby="damageModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Добавяне на забележка</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
+              </div>
+              <div class="modal-body">
+                <p>Детайл: <strong id="damagePart"></strong></p>
+                <textarea id="damageNote" class="form-control" rows="3" placeholder="Въведи забележка..."></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveDamageNote">Запази</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Documents Modal -->
+        <div class="modal fade" id="documentsModal" tabindex="-1" aria-labelledby="documentsModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="documentsModalLabel">Attached Documents</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div id="documentsList" class="row"></div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification Modal -->
+        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="notificationModalLabel">Notification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" id="notificationMessage"></div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Source Selection Modal -->
+  <div class="modal fade" id="sourceSelectionModal" tabindex="-1" aria-labelledby="sourceSelectionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sourceSelectionLabel">Choose Source</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <button type="button" class="btn btn-primary w-100 mb-2" id="useCamera">Camera</button>
+          <button type="button" class="btn btn-secondary w-100" id="useGallery">Gallery</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="galleryImageInput" accept="image/*" multiple style="display:none;">
+  <input type="file" id="galleryCameraInput" accept="image/*" capture="environment" multiple style="display:none;">
+  <input type="file" id="documentInput" accept="image/*,application/pdf" style="display:none;">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="js/firebase-init.js"></script>
+  <script type="module" src="js/menu.js"></script>
+  <script type="module" src="js/vehicle_details.js"></script>
+</body>
+</html>

@@ -47,35 +47,33 @@
       <nav class="col-md-2 sidebar p-3 d-none d-md-block" id="sidebar"></nav>
 
       <main class="col-md-10 content">
-        <!-- Statistic Cards -->
         <div class="row g-3 mb-4">
           <div class="col-md-3 col-6">
             <div class="stat-card bg-primary">
               <h4>Total Vehicles</h4>
-              <span>0</span>
+              <span id="totalVehicles">0</span>
             </div>
           </div>
           <div class="col-md-3 col-6">
             <div class="stat-card bg-success">
               <h4>Total Expenses</h4>
-              <span>€0</span>
+              <span id="totalExpenses">€0</span>
             </div>
           </div>
           <div class="col-md-3 col-6">
             <div class="stat-card bg-warning text-dark">
               <h4>Potential Value</h4>
-              <span>€0</span>
+              <span id="potentialValue">€0</span>
             </div>
           </div>
           <div class="col-md-3 col-6">
             <div class="stat-card bg-danger">
               <h4>Below Min. Price</h4>
-              <span>0</span>
+              <span id="belowMinPrice">0</span>
             </div>
           </div>
         </div>
 
-        <!-- Filter Buttons & Add -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
           <div class="filter-btns">
             <button class="btn btn-dark">All</button>
@@ -84,7 +82,7 @@
             <button class="btn btn-outline-secondary">Listed</button>
             <button class="btn btn-outline-secondary">Awaiting Payment</button>
           </div>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVehicleModal"><i class="fas fa-plus"></i> Add Vehicle</button>
+          <a href="add_vehicle.html" class="btn btn-primary"><i class="fas fa-plus"></i> Add Vehicle</a>
           <a href="invoice.html" class="btn btn-info">Issue Invoice</a>
         </div>
 
@@ -133,188 +131,58 @@
     </div>
   </div>
 
-  <!-- Add Vehicle Modal -->
-  <div class="modal fade" id="addVehicleModal" tabindex="-1" aria-labelledby="addVehicleLabel" aria-hidden="true" data-bs-backdrop="static">
+  <!-- Source Selection Modal -->
+  <div class="modal fade" id="sourceSelectionModal" tabindex="-1" aria-labelledby="sourceSelectionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="sourceSelectionLabel">Choose Source</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <button type="button" class="btn btn-primary w-100 mb-2" id="useCamera">Camera</button>
+          <button type="button" class="btn btn-secondary w-100" id="useGallery">Gallery</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schema Modal -->
+  <div class="modal fade" id="schemaModal" tabindex="-1" aria-labelledby="schemaLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addVehicleLabel">Add New Vehicle</h5>
+          <h5 class="modal-title" id="schemaLabel">Car Schema</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-          <form id="addForm">
-            <div class="mb-3">
-              <label for="type" class="form-label">Type*</label>
-              <select class="form-select" id="type" required>
-                <option>Car</option>
-                <option>Motorcycle</option>
-                <option>Bus</option>
-                <option>Truck</option>
-                <option>Trailer</option>
-                <option>Platform</option>
-                <option>Caravan</option>
-                <option>Camper</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="brand" class="form-label">Brand*</label>
-              <select class="form-select" id="brand" required>
-                <option>Abarth</option>
-                <option>Acura</option>
-                <option>Alfa Romeo</option>
-                <option>Alpine</option>
-                <option>Ariel</option>
-                <option>Aston Martin</option>
-                <option>Audi</option>
-                <option>Bentley</option>
-                <option>BMW</option>
-                <option>Bugatti</option>
-                <option>Buick</option>
-                <option>Cadillac</option>
-                <option>Caterham</option>
-                <option>Chevrolet</option>
-                <option>Chrysler</option>
-                <option>Citroen</option>
-                <option>Dacia</option>
-                <option>Daewoo</option>
-                <option>Daihatsu</option>
-                <option>Dodge</option>
-                <option>Ferrari</option>
-                <option>Fiat</option>
-                <option>Fisker</option>
-                <option>Ford</option>
-                <option>Genesis</option>
-                <option>GMC</option>
-                <option>Honda</option>
-                <option>Hummer</option>
-                <option>Hyundai</option>
-                <option>Infiniti</option>
-                <option>Isuzu</option>
-                <option>Jaguar</option>
-                <option>Jeep</option>
-                <option>Kia</option>
-                <option>Koenigsegg</option>
-                <option>Lamborghini</option>
-                <option>Lancia</option>
-                <option>Land Rover</option>
-                <option>Lexus</option>
-                <option>Lincoln</option>
-                <option>Lotus</option>
-                <option>Mahindra</option>
-                <option>Maserati</option>
-                <option>Maybach</option>
-                <option>Mazda</option>
-                <option>McLaren</option>
-                <option>Mercedes-Benz</option>
-                <option>Mercury</option>
-                <option>MG</option>
-                <option>Mini</option>
-                <option>Mitsubishi</option>
-                <option>Nissan</option>
-                <option>Opel</option>
-                <option>Pagani</option>
-                <option>Peugeot</option>
-                <option>Pontiac</option>
-                <option>Porsche</option>
-                <option>RAM</option>
-                <option>Renault</option>
-                <option>Rivian</option>
-                <option>Rolls-Royce</option>
-                <option>Saab</option>
-                <option>Saturn</option>
-                <option>Scion</option>
-                <option>Seat</option>
-                <option>Skoda</option>
-                <option>Smart</option>
-                <option>Subaru</option>
-                <option>Suzuki</option>
-                <option>Tesla</option>
-                <option>Toyota</option>
-                <option>Volkswagen</option>
-                <option>Volvo</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="model" class="form-label">Model*</label>
-              <select class="form-select" id="model" required></select>
-            </div>
-            <div class="mb-3">
-              <label for="regPlate" class="form-label">Reg Plate <i class="fas fa-camera" id="scanPlate" style="cursor:pointer;"></i></label>
-              <input type="text" class="form-control" id="regPlate">
-              <input type="file" id="plateInput" accept="image/*" capture="environment" style="display:none;">
-            </div>
-            <div class="mb-3">
-              <label for="mileage" class="form-label">Mileage* (km)</label>
-              <input type="number" class="form-control" id="mileage" required>
-            </div>
-            <div class="mb-3">
-              <label for="fuel" class="form-label">Fuel*</label>
-              <select class="form-select" id="fuel" required>
-                <option>Gasoline</option>
-                <option>Diesel</option>
-                <option>Electric</option>
-                <option>Hybrid</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="color" class="form-label">Color*</label>
-              <input type="text" class="form-control" id="color" required>
-            </div>
-            <div class="mb-3">
-              <label for="moreInfo" class="form-label">More Information*</label>
-              <textarea class="form-control" id="moreInfo" required></textarea>
-            </div>
-            <div class="mb-3">
-              <label for="variant" class="form-label">Variant*</label>
-              <input type="text" class="form-control" id="variant" required>
-            </div>
-            <div class="mb-3">
-              <label for="engine" class="form-label">Engine*</label>
-              <input type="text" class="form-control" id="engine" required>
-            </div>
-            <div class="mb-3">
-              <label for="vin" class="form-label">VIN*</label>
-              <input type="text" class="form-control" id="vin" required>
-            </div>
-            <div class="mb-3">
-              <label for="firstRegistration" class="form-label">First Registration*</label>
-              <input type="date" class="form-control" id="firstRegistration" required>
-            </div>
-            <div class="mb-3">
-              <label for="purchaseDate" class="form-label">Purchase Date*</label>
-              <input type="date" class="form-control" id="purchaseDate" required>
-            </div>
-            <div class="mb-3">
-              <label for="purchasedPrice" class="form-label">Purchased Price (USD)* <i class="fas fa-upload" id="uploadDocument" style="cursor:pointer;"></i></label>
-              <input type="number" class="form-control" id="purchasedPrice" required>
-              <input type="file" id="documentInput" accept="image/*,application/pdf" style="display:none;">
-            </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="hasWarranty">
-              <label class="form-check-label" for="hasWarranty">Has Warranty</label>
-            </div>
-            <div class="mb-3">
-              <label for="notes" class="form-label">Notes*</label>
-              <textarea class="form-control" id="notes" required></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Images <button type="button" class="btn btn-secondary btn-sm" id="recognizeCar">Recognize Car</button></label>
-              <button type="button" class="btn btn-secondary" id="uploadImages">Upload Images</button>
-              <div id="preview-container" class="mt-2"></div>
-              <input type="file" id="imageInput" accept="image/*" multiple style="display:none;">
-              <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple style="display:none;">
-              <input type="file" id="carImageInput" accept="image/*" capture="environment" style="display:none;">
-            </div>
-            <div class="mb-3">
-              <label for="video" class="form-label">Video</label>
-              <input type="file" class="form-control" id="video" accept="video/*">
-              <video id="video-preview" controls style="display:none; max-width:200px;"></video>
-            </div>
-          </form>
+        <div class="modal-body">
+          <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="50" y="50" width="300" height="100" fill="#add8e6" />
+            <text x="200" y="40" fill="black" text-anchor="middle">Select the vehicle areas to learn more about its condition:</text>
+            <circle class="car-part" id="front" cx="50" cy="100" r="10" fill="orange" />
+            <text x="50" y="60" fill="black">Front body</text>
+            <text x="50" y="120" fill="black">325 μm</text>
+            <circle class="car-part" id="roof" cx="200" cy="50" r="10" fill="orange" />
+            <text x="200" y="70" fill="black">Roof</text>
+            <text x="200" y="70" fill="black">107 μm</text>
+            <circle class="car-part" id="rear" cx="350" cy="100" r="10" fill="orange" />
+            <text x="350" y="60" fill="black">Rear body</text>
+            <text x="350" y="120" fill="black">128 μm</text>
+            <circle class="car-part" id="left" cx="200" cy="150" r="10" fill="orange" />
+            <text x="200" y="170" fill="black">Left body</text>
+            <text x="200" y="170" fill="black">134 μm</text>
+            <circle class="car-part" id="right" cx="250" cy="150" r="10" fill="orange" />
+            <text x="250" y="170" fill="black">Right body</text>
+            <text x="250" y="170" fill="black">123 μm</text>
+          </svg>
+          <div id="noteSection" style="display:none;">
+            <textarea id="noteText" class="form-control" placeholder="Add note"></textarea>
+            <input type="file" id="noteImage" accept="image/*">
+            <button type="button" class="btn btn-primary" id="saveNote">Save Note</button>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="saveVehicle">Save Vehicle</button>
         </div>
       </div>
     </div>
@@ -324,6 +192,5 @@
   <script type="module" src="js/firebase-init.js"></script>
   <script type="module" src="js/menu.js"></script>
   <script type="module" src="js/dashboard.js"></script>
-  <script type="module" src="js/add_vehicle.js"></script>
 </body>
 </html>

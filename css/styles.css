@@ -116,3 +116,19 @@ body {
 .menu-section:last-child {
   border-bottom: none;
 }
+.car-schema {
+  text-align: center;
+}
+.car-schema svg {
+  max-width: 100%;
+}
+#noteSection {
+  margin-top: 20px;
+}
+#noteText {
+  margin-bottom: 10px;
+}
+#vehicleImage img {
+  max-width: 100%;
+  height: auto;
+}
